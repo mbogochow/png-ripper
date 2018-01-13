@@ -1,0 +1,56 @@
+group 'me.mbogo'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.1.8'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.8'
+    compile group: 'ch.qos.logback', name: 'logback-parent', version: '1.1.8'
+}
+
+sourceSets.main {
+    java {
+        srcDir "src/main/java"
+    }
+    resources {
+        srcDirs = ["src/main/java", "src/main/resources"]
+        exclude "**/*.java"
+    }
+}
+
+if (project.hasProperty("mainClass")) {
+    mainClassName = mainClass
+} else {
+    mainClassName = "me.mbogo.Ripper"
+}
+
+jar {
+    manifest {
+        attributes(
+                "Main-Class": "$mainClassName",
+                "Implementation-Title": "PNG Ripper",
+                "Implementation-Version": "$version",
+                "Implementation-Vendor": "Mike Bogochow"
+        )
+    }
+
+    // Don't put version in jar file name
+    version = null
+
+    from {
+        //noinspection GroovyAssignabilityCheck
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    doLast { file(jar.archivePath).setExecutable(true, false) }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <property name="LEVEL" value="trace"/> <!--Set to info for release-->
+    <property name="format" value="[%d{yyyy-MM-dd hh:mm:ss.SSS}] %5level: %msg\r\n%rEx"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${format}</Pattern>
+        </encoder>
+    </appender>
+    <root level="${LEVEL}">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
